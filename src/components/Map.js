@@ -9,15 +9,24 @@ Map.defaultProps = {
     zoom: 6
 }
 
-export default function Map({ center, zoom }) {
+export default function Map({ eventData, center, zoom }) {
+
+    const marker = eventData.map(ev => {
+        // in if condition >>> id === 8 means categories should be Wildfires
+        if (ev.categories[0].id === 8) {
+            return <LocationMarker lng={ev.geometries[0].coordinates[0]} lat={ev.geometries[0].coordinates[1]}/>
+        }
+        return null;
+    })
+
     return (
         <div className='map'>
             <GoogleMapReact
-            bootstrapURLKeys={{ key: 'AIzaSyBk4oX3dA9zFy2yysc_EkD3LAXcdZGnyXs'}}
+            bootstrapURLKeys={{ key: process.env.REACT_APP_MAP_API_KEY }}
             defaultCenter={ center }
             defaultZoom={ zoom }
             >
-                <LocationMarker lat={center.lat} lng={center.lng} />
+                {marker}
             </GoogleMapReact>
         </div>
     )
